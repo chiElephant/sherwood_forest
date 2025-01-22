@@ -15,5 +15,6 @@ export default {
     tint: tintColorDark, // Light green for interactive elements
     tabIconDefault: '#757575', // Neutral gray for unselected icons
     tabIconSelected: tintColorDark, // Light green for selected icons
+    gray: '#141518', // Dark gray
   },
 };
