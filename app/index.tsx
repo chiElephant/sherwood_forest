@@ -25,16 +25,17 @@ const Page = () => {
       <View style={styles.headerContainer}>
         <Text style={styles.header}>Invest Where the Forest Grows.</Text>
       </View>
+
       <View style={styles.buttons}>
         <Link
           href={'/Login'}
           style={[
             defaultStyles.pillButton,
-            { flex: 1, backgroundColor: Colors.dark.gray },
+            { flex: 1, backgroundColor: Colors.dark },
           ]}
           asChild>
           <TouchableOpacity>
-            <Text style={styles.buttonsText}>Login</Text>
+            <Text style={{ ...styles.btnText, color: 'white' }}>Login</Text>
           </TouchableOpacity>
         </Link>
         <Link
@@ -45,9 +46,7 @@ const Page = () => {
           ]}
           asChild>
           <TouchableOpacity>
-            <Text style={{ ...styles.buttonsText, color: Colors.dark.gray }}>
-              Sign up
-            </Text>
+            <Text style={styles.btnText}>Sign up</Text>
           </TouchableOpacity>
         </Link>
       </View>
@@ -81,8 +80,7 @@ const styles = StyleSheet.create({
     gap: 20,
     paddingHorizontal: 20,
   },
-  buttonsText: {
-    color: 'white',
+  btnText: {
     fontSize: 22,
     fontWeight: '500',
   },
