@@ -133,7 +133,7 @@ const Login = () => {
             {
               flexDirection: 'row',
               gap: 16,
-              marginTop: 10,
+              marginTop: 20,
               backgroundColor: '#fff',
             },
           ]}>
@@ -154,7 +154,7 @@ const Login = () => {
             {
               flexDirection: 'row',
               gap: 16,
-              marginTop: 10,
+              marginTop: 20,
               backgroundColor: '#fff',
             },
           ]}>
@@ -174,7 +174,7 @@ const Login = () => {
             {
               flexDirection: 'row',
               gap: 16,
-              marginTop: 10,
+              marginTop: 20,
               backgroundColor: '#fff',
             },
           ]}>

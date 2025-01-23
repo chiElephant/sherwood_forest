@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   headerContainer: {
-    marginTop: 20,
+    marginTop: 80,
     padding: 20,
   },
   header: {
@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     gap: 20,
+    marginBottom: 60,
     paddingHorizontal: 20,
   },
   btnText: {
