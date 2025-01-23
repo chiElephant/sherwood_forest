@@ -1,4 +1,5 @@
 import Colors from '@/constants/Colors';
+import { ClerkProvider } from '@clerk/clerk-expo';
 import { Ionicons } from '@expo/vector-icons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useFonts } from 'expo-font';
@@ -10,6 +11,9 @@ import { useEffect } from 'react';
 import { TouchableOpacity } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
+import { tokenCache } from '@/cache';
+
+const CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEYs;
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -98,19 +102,41 @@ const InitialLayout = () => {
         }}
       />
       <Stack.Screen
-        name='help'
+        name='Help'
         options={{ title: 'Help', presentation: 'modal' }}
       />
+
+      <Stack.Screen
+        name='verify/[phone]'
+        options={{
+          title: '',
+          headerBackTitle: '',
+          headerShadowVisible: false,
+          headerStyle: { backgroundColor: Colors.background },
+          headerLeft: () => (
+            <TouchableOpacity onPress={router.back}>
+              <Ionicons
+                name='arrow-back'
+                size={34}
+                color={Colors.dark}
+              />
+            </TouchableOpacity>
+          ),
+        }}></Stack.Screen>
     </Stack>
   );
 };
 
 const RootLayoutNav = () => {
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <StatusBar style='light' />
-      <InitialLayout />
-    </GestureHandlerRootView>
+    <ClerkProvider
+      tokenCache={tokenCache}
+      publishableKey={CLERK_PUBLISHABLE_KEY!}>
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <StatusBar style='light' />
+        <InitialLayout />
+      </GestureHandlerRootView>
+    </ClerkProvider>
   );
 };
 

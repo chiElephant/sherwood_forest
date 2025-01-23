@@ -6,14 +6,16 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from 'react-native';
 import { useState } from 'react';
 import { defaultStyles } from '@/constants/Styles';
 import Colors from '@/constants/Colors';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { isClerkAPIResponseError, useSignIn } from '@clerk/clerk-expo';
 
-enum SignInType {
+enum LoginType {
   Phone,
   Email,
   Google,
@@ -22,12 +24,45 @@ enum SignInType {
 
 const Login = () => {
   const [countryCode, setCountryCode] = useState('+1');
-  const [mobileNumber, setMobileNumber] = useState('');
-
+  const [phoneNumber, setPhoneNumber] = useState('');
   const keyBoardVerticalOffset = Platform.OS === 'ios' ? 80 : 0;
-  const onSignIn = async (type: SignInType) => {
-    if (type === SignInType.Phone) {
-      console.log('Hello, world');
+
+  const router = useRouter();
+  const { signIn } = useSignIn();
+
+  const onLogin = async (type: LoginType) => {
+    if (type === LoginType.Phone) {
+      const fullPhoneNumber = `${countryCode}${phoneNumber}`;
+      try {
+        const { supportedFirstFactors } = await signIn!.create({
+          identifier: fullPhoneNumber,
+        });
+
+        const firstPhoneFactors: any = supportedFirstFactors?.find(
+          (factor: any) => {
+            return factor.strategy === 'phone_code';
+          }
+        );
+
+        const { phoneNumberId } = firstPhoneFactors;
+
+        await signIn!.prepareFirstFactor({
+          strategy: 'phone_code',
+          phoneNumberId,
+        });
+
+        router.push({
+          pathname: '/verify/[phone]',
+          params: { phone: fullPhoneNumber, signin: 'true' },
+        });
+      } catch (error) {
+        console.log('error', JSON.stringify(error, null, 2));
+        if (isClerkAPIResponseError(error)) {
+          if (error.errors[0].code === 'form_identifier_not_found') {
+            Alert.alert('Error', error.errors[0].message);
+          }
+        }
+      }
     }
   };
 
@@ -50,22 +85,22 @@ const Login = () => {
           />
           <TextInput
             style={[styles.input, { flex: 1 }]}
-            placeholder={'Mobile number'}
+            placeholder={'Phone number'}
             placeholderTextColor={Colors.gray}
             inputMode={'numeric'}
-            value={mobileNumber}
+            value={phoneNumber}
             textContentType='telephoneNumber'
-            onChangeText={setMobileNumber}
+            onChangeText={setPhoneNumber}
           />
         </View>
 
         <TouchableOpacity
           style={[
             defaultStyles.pillButton,
-            mobileNumber !== '' ? styles.enabled : styles.disabled,
+            phoneNumber !== '' ? styles.enabled : styles.disabled,
             { marginBottom: 20 },
           ]}
-          onPress={() => onSignIn(SignInType.Phone)}>
+          onPress={() => onLogin(LoginType.Phone)}>
           <Text style={defaultStyles.buttonText}>Continue</Text>
         </TouchableOpacity>
 
@@ -92,7 +127,7 @@ const Login = () => {
           />
         </View>
         <TouchableOpacity
-          onPress={() => onSignIn(SignInType.Email)}
+          onPress={() => onLogin(LoginType.Email)}
           style={[
             defaultStyles.pillButton,
             {
@@ -113,7 +148,7 @@ const Login = () => {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => onSignIn(SignInType.Google)}
+          onPress={() => onLogin(LoginType.Google)}
           style={[
             defaultStyles.pillButton,
             {
@@ -129,11 +164,11 @@ const Login = () => {
             color={'#000'}
           />
           <Text style={[defaultStyles.buttonText, { color: '#000' }]}>
-            Continue with email
+            Continue with Google
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => onSignIn(SignInType.Apple)}
+          onPress={() => onLogin(LoginType.Apple)}
           style={[
             defaultStyles.pillButton,
             {
@@ -149,7 +184,7 @@ const Login = () => {
             color={'#000'}
           />
           <Text style={[defaultStyles.buttonText, { color: '#000' }]}>
-            Continue with email
+            Continue with Apple
           </Text>
         </TouchableOpacity>
       </View>

@@ -10,14 +10,38 @@ import {
 import { useState } from 'react';
 import { defaultStyles } from '@/constants/Styles';
 import Colors from '@/constants/Colors';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
+import { useSignUp } from '@clerk/clerk-expo';
 
 const Signup = () => {
-  const [countryCode, setCountryCode] = useState('+1');
-  const [mobileNumber, setMobileNumber] = useState('');
-
   const keyBoardVerticalOffset = Platform.OS === 'ios' ? 80 : 0;
-  const onSignup = async () => {};
+
+  const [countryCode, setCountryCode] = useState('+1');
+  const [phoneNumber, setPhoneNumber] = useState('');
+
+  const router = useRouter();
+  const { signUp } = useSignUp();
+
+  const onSignup = async () => {
+    const fullPhoneNumber = `${countryCode}${phoneNumber}`;
+    router.push({
+      pathname: '/verify/[phone]',
+      params: { phone: fullPhoneNumber },
+    });
+
+    // try {
+    //   await signUp!.create({
+    //     phoneNumber: fullPhoneNumber,
+    //   });
+    //   router.push({
+    //     pathname: '/verify/[phone]',
+    //     params: { phone: fullPhoneNumber },
+    //   });
+    // } catch (error) {
+    //   console.error('Error signing up: ', error);
+    //   router.push('/Login');
+    // }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -41,9 +65,9 @@ const Signup = () => {
             placeholder={'Mobile number'}
             placeholderTextColor={Colors.gray}
             inputMode={'numeric'}
-            value={mobileNumber}
+            value={phoneNumber}
             textContentType='telephoneNumber'
-            onChangeText={setMobileNumber}
+            onChangeText={setPhoneNumber}
           />
         </View>
 
@@ -63,7 +87,7 @@ const Signup = () => {
         <TouchableOpacity
           style={[
             defaultStyles.pillButton,
-            mobileNumber !== '' ? styles.enabled : styles.disabled,
+            phoneNumber !== '' ? styles.enabled : styles.disabled,
             { marginBottom: 20 },
           ]}
           onPress={onSignup}>
