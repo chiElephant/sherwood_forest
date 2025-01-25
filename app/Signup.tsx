@@ -38,7 +38,7 @@ const Signup = () => {
       });
     } catch (error) {
       console.error('Error signing up: ', error);
-      router.push('/Login');
+      router.push('/login');
     }
   };
 
@@ -71,7 +71,7 @@ const Signup = () => {
         </View>
 
         <Link
-          href={'/Login'}
+          href={'/login'}
           replace
           asChild>
           <TouchableOpacity>

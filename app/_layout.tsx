@@ -68,9 +68,9 @@ const InitialLayout = () => {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name='Signup'
+        name='signup'
         options={{
-          title: '',
+          title: 'Signup',
           headerBackTitle: '',
           headerShadowVisible: false,
           headerStyle: { backgroundColor: Colors.background },
@@ -86,9 +86,9 @@ const InitialLayout = () => {
         }}
       />
       <Stack.Screen
-        name='Login'
+        name='login'
         options={{
-          title: '',
+          title: 'Login',
           headerBackTitle: '',
           headerShadowVisible: false,
           headerStyle: { backgroundColor: Colors.background },
@@ -103,7 +103,7 @@ const InitialLayout = () => {
           ),
           headerRight: () => (
             <Link
-              href={'/Help'}
+              href={'/help'}
               asChild>
               <TouchableOpacity>
                 <Ionicons
@@ -117,7 +117,7 @@ const InitialLayout = () => {
         }}
       />
       <Stack.Screen
-        name='Help'
+        name='help'
         options={{ title: 'Help', presentation: 'modal' }}
       />
 
