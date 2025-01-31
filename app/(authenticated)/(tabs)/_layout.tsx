@@ -1,3 +1,4 @@
+import CustomHeader from '@/components/CustomHeader';
 import Colors from '@/constants/Colors';
 import { FontAwesome } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
@@ -12,6 +13,7 @@ const Layout = () => {
         tabBarBackground: () => (
           <BlurView
             intensity={100}
+            tint={'extraLight'}
             style={styles.blurView}
           />
         ),
@@ -28,6 +30,7 @@ const Layout = () => {
               color={color}
             />
           ),
+          header: () => <CustomHeader />,
         }}
       />
 
