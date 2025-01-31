@@ -1,5 +1,6 @@
-import 'react-native-get-random-values';
-import { v4 as uuidv4 } from 'uuid';
+// import 'react-native-get-random-values';
+// import { v4 as uuidv4 } from 'uuid';
+import * as Crypto from 'expo-crypto';
 import Dropdown from '@/components/Dropdown';
 import RoundButton from '@/components/RoundButton';
 import Colors from '@/constants/Colors';
@@ -14,7 +15,7 @@ const Page = () => {
     useBalanceStore();
 
   const onAddFunds = () => {
-    const id = uuidv4();
+    const id = Crypto.randomUUID();
 
     const amount =
       Math.floor(Math.random() * 1000) * (Math.random() > 0.5 ? 1 : -1);
