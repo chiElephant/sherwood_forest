@@ -31,6 +31,7 @@ const Layout = () => {
             />
           ),
           header: () => <CustomHeader />,
+          headerTransparent: true,
         }}
       />
 

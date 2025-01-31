@@ -1,19 +1,19 @@
-// import 'react-native-get-random-values';
-// import { v4 as uuidv4 } from 'uuid';
 import * as Crypto from 'expo-crypto';
 import Dropdown from '@/components/Dropdown';
 import RoundButton from '@/components/RoundButton';
-import Colors from '@/constants/Colors';
-import { useBalanceStore } from '@/store/balanceStore';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
-import { defaultStyles } from '@/constants/Styles';
-import { Ionicons } from '@expo/vector-icons';
 import WidgetList from '@/components/SortableList/WidgetList';
+import Colors from '@/constants/Colors';
+import { defaultStyles } from '@/constants/Styles';
+import { useBalanceStore } from '@/store/balanceStore';
+import { Ionicons } from '@expo/vector-icons';
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { useHeaderHeight } from '@react-navigation/elements';
 
 const Page = () => {
   const { balance, runTransaction, transactions, clearTransactions } =
     useBalanceStore();
 
+  const headerHeight = useHeaderHeight();
   const onAddFunds = () => {
     const id = Crypto.randomUUID();
 
@@ -29,7 +29,11 @@ const Page = () => {
   };
 
   return (
-    <ScrollView style={{ backgroundColor: Colors.background }}>
+    <ScrollView
+      style={{ backgroundColor: Colors.background }}
+      contentContainerStyle={{
+        paddingTop: headerHeight,
+      }}>
       <View style={styles.account}>
         <View style={styles.row}>
           <Text style={styles.currency}>$</Text>

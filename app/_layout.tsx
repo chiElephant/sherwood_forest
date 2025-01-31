@@ -154,7 +154,7 @@ const RootLayoutNav = () => {
       tokenCache={tokenCache}
       publishableKey={CLERK_PUBLISHABLE_KEY!}>
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <StatusBar style='light' />
+        <StatusBar style='auto' />
         <InitialLayout />
       </GestureHandlerRootView>
     </ClerkProvider>
