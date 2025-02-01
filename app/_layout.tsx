@@ -12,8 +12,11 @@ import { TouchableOpacity, Text } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
 import { tokenCache } from '@/cache';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEYs;
+
+const queryClient = new QueryClient();
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -45,13 +48,12 @@ const InitialLayout = () => {
   }, [loaded]);
 
   useEffect(() => {
-    console.log('Signed In', isSignedIn);
     if (!isLoaded) return;
 
     const inAuthGroup = segments[0] === '(authenticated)';
 
     if (isSignedIn && !inAuthGroup) {
-      router.replace('/(authenticated)/(tabs)/home');
+      router.replace('/(authenticated)/(tabs)/crypto');
     } else if (!isSignedIn) {
       router.replace('/');
     }
@@ -153,10 +155,12 @@ const RootLayoutNav = () => {
     <ClerkProvider
       tokenCache={tokenCache}
       publishableKey={CLERK_PUBLISHABLE_KEY!}>
-      <GestureHandlerRootView style={{ flex: 1 }}>
-        <StatusBar style='auto' />
-        <InitialLayout />
-      </GestureHandlerRootView>
+      <QueryClientProvider client={queryClient}>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <StatusBar style='auto' />
+          <InitialLayout />
+        </GestureHandlerRootView>
+      </QueryClientProvider>
     </ClerkProvider>
   );
 };

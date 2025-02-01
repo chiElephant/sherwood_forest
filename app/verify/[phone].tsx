@@ -52,7 +52,7 @@ const Page = () => {
 
       await setActive!({ session: signUp!.createdSessionId });
     } catch (error) {
-      console.log('error', JSON.stringify(error, null, 2));
+      console.error('error', JSON.stringify(error, null, 2));
       if (isClerkAPIResponseError(error)) {
         Alert.alert('Error', error.errors[0].message);
       }
@@ -68,7 +68,7 @@ const Page = () => {
 
       await setActive!({ session: signIn!.createdSessionId });
     } catch (error) {
-      console.log('error', JSON.stringify(error, null, 2));
+      console.error('error', JSON.stringify(error, null, 2));
       if (isClerkAPIResponseError(error)) {
         Alert.alert('Error', error.errors[0].message);
       }
@@ -113,7 +113,7 @@ const Page = () => {
       />
 
       <Link
-        href={'/Login'}
+        href={'/login'}
         replace
         asChild>
         <TouchableOpacity>

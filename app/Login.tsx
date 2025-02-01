@@ -56,7 +56,7 @@ const Login = () => {
           params: { phone: fullPhoneNumber, signin: 'true' },
         });
       } catch (error) {
-        console.log('error', JSON.stringify(error, null, 2));
+        console.error('error', JSON.stringify(error, null, 2));
         if (isClerkAPIResponseError(error)) {
           if (error.errors[0].code === 'form_identifier_not_found') {
             Alert.alert('Error', error.errors[0].message);
