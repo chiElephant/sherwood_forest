@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Stack, useLocalSearchParams } from 'expo-router';
 import {
   SectionList,
@@ -19,6 +19,8 @@ const categories = ['Overview', 'News', 'Orders', 'Transactions'];
 const Page = () => {
   const { id } = useLocalSearchParams();
   const headerHeight = useHeaderHeight();
+
+  const [activeIndex, setActiveIndex] = useState(0);
 
   const { data } = useQuery({
     queryKey: ['info', id],
@@ -46,15 +48,27 @@ const Page = () => {
               justifyContent: 'space-between',
               paddingHorizontal: 16,
               paddingBottom: 8,
-              backgroundColor: Colors.background,
+              // backgroundColor: Colors.background,
               borderBottomColor: Colors.lightGray,
               borderBottomWidth: StyleSheet.hairlineWidth,
             }}>
-            {categories.map((category) => (
+            {categories.map((category, index) => (
               <TouchableOpacity
                 key={category}
-                style={{}}>
-                <Text style={{}}>{category}</Text>
+                onPress={() => setActiveIndex(index)}
+                style={
+                  activeIndex === index ?
+                    styles.categoriesBtnActive
+                  : styles.categoriesBtn
+                }>
+                <Text
+                  style={
+                    activeIndex === index ?
+                      styles.categoryTextActive
+                    : styles.categoryText
+                  }>
+                  {category}
+                </Text>
               </TouchableOpacity>
             ))}
           </ScrollView>
@@ -117,6 +131,8 @@ const Page = () => {
         renderItem={({ item }) => (
           <>
             {/* TODO: CHART */}
+            {/* <View style={{ height: 500, backgroundColor: 'green' }}></View> */}
+
             <View style={[defaultStyles.block, { marginTop: 20 }]}>
               <Text style={styles.subtitle}>Overview</Text>
               <Text style={{ color: Colors.gray }}>{data?.description}</Text>
@@ -127,8 +143,6 @@ const Page = () => {
   );
 };
 
-export default Page;
-
 const styles = StyleSheet.create({
   subtitle: {
     fontSize: 20,
@@ -136,4 +150,29 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     color: Colors.gray,
   },
+  categoryText: {
+    fontSize: 14,
+    color: Colors.gray,
+  },
+  categoryTextActive: {
+    fontSize: 14,
+    color: '#000',
+  },
+  categoriesBtn: {
+    padding: 10,
+    paddingHorizontal: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 20,
+  },
+  categoriesBtnActive: {
+    padding: 10,
+    paddingHorizontal: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 20,
+  },
 });
+
+export default Page;
