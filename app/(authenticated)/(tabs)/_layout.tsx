@@ -74,6 +74,8 @@ const Layout = () => {
               color={color}
             />
           ),
+          header: () => <CustomHeader />,
+          headerTransparent: true,
         }}
       />
 
