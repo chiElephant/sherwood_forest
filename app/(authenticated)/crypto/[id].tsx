@@ -14,7 +14,9 @@ import Colors from '@/constants/Colors';
 import { defaultStyles } from '@/constants/Styles';
 import { useQuery } from '@tanstack/react-query';
 import { Ionicons } from '@expo/vector-icons';
-
+import { CartesianChart, Line } from 'victory-native';
+import { useFont } from '@shopify/react-native-skia';
+import { format } from 'date-fns';
 const categories = ['Overview', 'News', 'Orders', 'Transactions'];
 const Page = () => {
   const { id } = useLocalSearchParams();
@@ -22,12 +24,20 @@ const Page = () => {
 
   const [activeIndex, setActiveIndex] = useState(0);
 
+  const font = useFont(require('@/assets/fonts/SpaceMono-Regular.ttf'), 12);
+
   const { data } = useQuery({
     queryKey: ['info', id],
     queryFn: async () => {
       const info = await fetch(`/api/info?ids=${id}`).then((res) => res.json());
       return info[+id];
     },
+  });
+
+  const { data: tickers } = useQuery({
+    queryKey: ['tickers'],
+    queryFn: async (): Promise<any[]> =>
+      await fetch(`/api/tickers`).then((res) => res.json()),
   });
 
   return (
@@ -130,8 +140,30 @@ const Page = () => {
         )}
         renderItem={({ item }) => (
           <>
-            {/* TODO: CHART */}
-            {/* <View style={{ height: 500, backgroundColor: 'green' }}></View> */}
+            <View style={[defaultStyles.block, { height: 500 }]}>
+              {tickers && (
+                <CartesianChart
+                  axisOptions={{
+                    font,
+                    tickCount: 5,
+                    labelOffset: { x: -2, y: 0 },
+                    labelColor: Colors.gray,
+                    formatYLabel: (v) => `$ ${v}`,
+                    formatXLabel: (ms) => format(new Date(ms), 'MM/yy'),
+                  }}
+                  data={tickers}
+                  xKey='timestamp'
+                  yKeys={['price']}>
+                  {({ points }) => (
+                    <Line
+                      points={points.price}
+                      color={Colors.primary}
+                      strokeWidth={3}
+                    />
+                  )}
+                </CartesianChart>
+              )}
+            </View>
 
             <View style={[defaultStyles.block, { marginTop: 20 }]}>
               <Text style={styles.subtitle}>Overview</Text>
